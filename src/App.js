@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import HomePage from "./homepage/HomePage";
+import Playground from "./playground/Playground";
+import Gameover from "./gameover/Gameover";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    gamestart: false,
+    gamefinished: false,
+    score: 0,
+    timer: 59
+  };
+  startGame = () => {
+    this.setState({ gamestart: true });
+  };
+  endGame = score => {
+    this.setState({ gamefinished: true, score });
+  };
+  restartGame = () => {
+    this.setState({ gamestart: true, gamefinished: false, score: 0 });
+  };
+  render() {
+    return (
+      <>
+        <div className="container">
+          {!this.state.gamestart ? (
+            <HomePage gamestart={this.startGame} />
+          ) : !this.state.gamefinished ? (
+            <Playground endGame={this.endGame} time={this.state.timer} />
+          ) : (
+            <Gameover score={this.state.score} restart={this.restartGame} />
+          )}
+        </div>
+      </>
+    );
+  }
 }
 
 export default App;
